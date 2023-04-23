@@ -2,12 +2,15 @@ package lsi.ubu.enunciado;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lsi.ubu.enunciado.GestionMedicosException;
 import lsi.ubu.util.ExecuteScript;
 import lsi.ubu.util.PoolDeConexiones;
 
@@ -37,11 +40,30 @@ public class GestionMedicos {
 		
 		PoolDeConexiones pool = PoolDeConexiones.getInstance();
 		Connection con=null;
+		PreparedStatement pst_sel_cliente = null;
+		PreparedStatement pst_sel_medico = null;
+		ResultSet rs_sel_cliente = null;
+		ResultSet rs_sel_medico = null;
 
 	
 		try{
 			con = pool.getConnection();
+			pst_sel_cliente =  con.prepareStatement(
+					"select NIF from cliente where NIF=?");
+			pst_sel_cliente.setString(1,m_NIF_cliente);
+			rs_sel_cliente = pst_sel_cliente.executeQuery();
+			if(!rs_sel_cliente.next()) {
+				throw new GestionMedicosException(1);
+			}
+			pst_sel_medico = con.prepareStatement(
+					"select NIF from medico where NIF=?");
+			pst_sel_medico.setString(1,m_NIF_medico);
+			rs_sel_medico = pst_sel_medico.executeQuery();
+			if(!rs_sel_medico.next()) {
+				throw new GestionMedicosException(2);
+			}
 			
+								
 		} catch (SQLException e) {
 			//Completar por el alumno			
 			
