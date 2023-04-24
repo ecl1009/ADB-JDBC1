@@ -1,4 +1,4 @@
-package lsi.ubu.enunciado;
+package lsi.ubu.solucion;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
